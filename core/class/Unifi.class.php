@@ -68,15 +68,24 @@ class Unifi extends eqLogic {
 				$eqLogic->setIsVisible(0);
 				$eqLogic->setIsEnable(1);
 			}
-			if (empty($client->name)) {
-				if (empty($client->oui)) {
-					$name = $client->mac;
-				} else {
-					$name = $client->oui;
-				}
-			} else {
+			if (!empty($client->name)) {
 				$name = $client->name;
+			} else {
+				if (!empty($client->oui)) {
+					$name = $client->oui;
+				} else {
+					if (!empty($client->ip)) {
+						$name = $client->ip;
+					} else {
+						if (!empty($client->mac)) {
+							$name = $client->mac;
+						} else {
+							log::add(__CLASS__, 'info', '[' . $client->ip . '] Problème avec  « ' . print_r($client,true) . ' ».');
+						}
+					}
+				}
 			}
+			$eqLogic->setName($name);
 			$eqLogic->setConfiguration('ip', $client->ip);
 			$eqLogic->setConfiguration('model', $client->dev_id_override);
 			$eqLogic->save();
