@@ -1,0 +1,18 @@
+Ce dossier doit contenir toutes les librairies externes utilisées par le plugin.
+
+/**
+ * the UniFi API client class
+ *
+ * This UniFi API client class is based on the work done by the following developers:
+ *    domwo: http://community.ubnt.com/t5/UniFi-Wireless/little-php-class-for-unifi-api/m-p/603051
+ *    fbagnol: https://github.com/fbagnol/class.unifi.php
+ * and the API as published by Ubiquiti:
+ *    https://www.ubnt.com/downloads/unifi/<UniFi controller version number>/unifi_sh_api
+ *
+ * @package UniFi_Controller_API_Client_Class
+ * @author  Art of WiFi <info@artofwifi.net>
+ * @version Release: 1.1.70
+ * @license This class is subject to the MIT license that is bundled with this package in the file LICENSE.md
+ * @example This directory in the package repository contains a collection of examples:
+ *          https://github.com/Art-of-WiFi/UniFi-API-client/tree/master/examples
+ */

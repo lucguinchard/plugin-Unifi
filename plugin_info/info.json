@@ -1,0 +1,16 @@
+{
+	"id": "Unifi",
+	"name": "Unifi",
+	"description": "Plugin permettant la gestion des appareils Unifi",
+	"licence": "GNU GPLv2",
+	"author": "Luc Guinchard",
+	"require": "3.0",
+	"category": "devicecommunication",
+	"display": "panel",
+	"mobile": "panel",
+	"hasDependency": false,
+	"hasOwnDeamon": false,
+	"maxDependancyInstallTime": 0,
+	"changelog": "https://lucguinchard.github.io/plugin-Unifi/#language#/changelog",
+	"documentation": "https://lucguinchard.github.io/plugin-Unifi/#language#/"
+}
