@@ -68,7 +68,15 @@ class Unifi extends eqLogic {
 				$eqLogic->setIsVisible(0);
 				$eqLogic->setIsEnable(1);
 			}
-			$eqLogic->setName($client->name);
+			if (empty($client->name)) {
+				if (empty($client->oui)) {
+					$name = $client->mac;
+				} else {
+					$name = $client->oui;
+				}
+			} else {
+				$name = $client->name;
+			}
 			$eqLogic->setConfiguration('ip', $client->ip);
 			$eqLogic->setConfiguration('model', $client->dev_id_override);
 			$eqLogic->save();
