@@ -17,7 +17,7 @@
  */
 
 if (!isConnect('admin')) {
-	throw new \Exception('{{401 - Accès non autorisé}}');
+	throw new Exception('{{401 - Accès non autorisé}}');
 }
 
 $pluginName = init('m');
@@ -48,17 +48,67 @@ $eqLogicList = eqLogic::byType($plugin->getId());
 			</center>
 		<?php } else { ?>
 			<input class="form-control" placeholder="{{Rechercher}}" id="in_searchEqlogic" />
-			<div class="eqLogicThumbnailContainer">
+			<div class="panel panel-default">
+				<h3 class="panel-title">
+					<a class="accordion-toggle" data-toggle="collapse" data-parent="" href="#Unifi_Device"><i class="fa fa-server"></i></i> Unifi Device</a>
+				</h3>
+				<div id="Unifi_Device" class="panel-collapse collapse in">
+				<div class="eqLogicThumbnailContainer">
 				<?php
 				foreach ($eqLogicList as $eqLogic) {
-					$opacity = ($eqLogic->getIsEnable()) ? '' : 'disableCard'; ?>
+					if($eqLogic->getConfiguration('type') != 'device') continue;
+					$opacity = ($eqLogic->getIsEnable()) ? '' : 'disableCard'; 
+					$cmd_active = $eqLogic->getCmd(null, 'active');
+					if($cmd_active->execCmd()) {
+						$color = "green";
+					} else {
+						$color = "red";
+					}
+					$cmd_is_wired = "";
+					?>
 					<div class="eqLogicDisplayCard cursor <?= $opacity ?>" data-eqLogic_id="<?= $eqLogic->getId() ?>">
 						<div style="height: 100px">
 							<img src="<?= $eqLogic->getImage() ?>" style="max-width: 100px !important;width: auto !important;max-height: 100px !important;min-height: auto !important;"/>
 						</div>
+						<span class="name"><?= $eqLogic->getHumanName(true, true) ?> <?= $is_wired ?></span>
+					</div>
+				<?php } ?>
+			</div>
+			</div>
+			</div>
+			<div class="panel panel-default">
+				<h3 class="panel-title">
+					<a class="accordion-toggle" data-toggle="collapse" data-parent="" href="#Unifi_Client"><i class="fa fa-laptop-code"></i> Unifi Client</a>
+				</h3>
+				<div id="Unifi_Client" class="panel-collapse collapse in">
+				<div class="eqLogicThumbnailContainer">
+				<?php
+				foreach ($eqLogicList as $eqLogic) {
+					if($eqLogic->getConfiguration('type') == 'device') continue;
+					$cmd_active = $eqLogic->getCmd(null, 'active');
+					$opacity = (!$eqLogic->getIsEnable() || !$cmd_active->execCmd()) ? 'disableCard' : ''; 
+					$color = ($cmd_active->execCmd()) ? 'green' : 'red'; 
+					$cmd_is_wired = $eqLogic->getCmd(null, 'is_wired');
+					if (!is_object($cmd_is_wired) || $cmd_is_wired->execCmd()) { 
+						$is_wired = '<i class="fas fa-ethernet"></i>';
+					} else {
+						$is_wired = '<i class="fas fa-wifi"></i> ';
+					}
+					$cmd_network = $eqLogic->getCmd(null, 'network');
+					if (is_object($cmd_network)){
+						$network = $cmd_network->execCmd();
+					}
+					?>
+					<div class="eqLogicDisplayCard cursor <?= $opacity ?>" data-eqLogic_id="<?= $eqLogic->getId() ?>">
+						<div style="height: 100px;position: relative;">
+							<img src="<?= $eqLogic->getImage() ?>" style="max-width: 100px !important;width: auto !important;max-height: 100px !important;min-height: auto !important;"/>
+							<span style="position: absolute;left: 10px;bottom: 0px;color:white;left: 5%;border-radius: 10%;padding: 0 2px;background-color: <?= $color ?>;font-size: x-small;"><?= $is_wired ?> <?= $network ?></span>
+						</div>
 						<span class="name"><?= $eqLogic->getHumanName(true, true) ?></span>
 					</div>
 				<?php } ?>
+			</div>
+			</div>
 			</div>
 		<?php } ?>
 	</div>
@@ -105,12 +155,12 @@ $eqLogicList = eqLogic::byType($plugin->getId());
 						<form class="form-horizontal">
 							<fieldset>
 								<div class="form-group">
-									<label class="col-sm-6 control-label" for="name">{{Nom de l’équipement Musiccast}}</label>
+									<label class="col-sm-6 control-label" for="name">{{Nom de l’équipement}}</label>
 									<div class="col-sm-3">
 										<input type="text" class="eqLogicAttr form-control" data-l1key="id"
 											   style="display : none;"/>
 										<input type="text" class="eqLogicAttr form-control" data-l1key="name" id="name"
-											   placeholder="{{Nom de l’équipement Musiccast}}"/>
+											   placeholder="{{Nom de l’équipement}}"/>
 									</div>
 								</div>
 								<div class="form-group">

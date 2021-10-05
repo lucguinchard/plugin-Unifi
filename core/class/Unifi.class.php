@@ -88,6 +88,7 @@ class Unifi extends eqLogic {
 			$eqLogic->setName($name);
 			$eqLogic->setConfiguration('ip', $client->ip);
 			$eqLogic->setConfiguration('model', $client->dev_id_override);
+			$eqLogic->setConfiguration('type', 'client');
 			$eqLogic->save();
 			
 			
@@ -98,10 +99,7 @@ class Unifi extends eqLogic {
 				$url = "https://static.ubnt.com/fingerprint/0/" . $client->dev_id_override . "_129x129.png";
 				file_put_contents($fileAlbumART, file_get_contents($url));
 			}
-//				$url = "http://" . $eqLogic->getConfiguration('ip') . $result->albumart_url;
-//				$netusb_albumart_url = null;
-//				if (file_put_contents($fileAlbumART, file_get_contents($url))) {
-			
+
 			$configurationNetwork['type'] = 'network';
 
 			$network_active = $eqLogic->createCmd('active', 'info', 'binary', false, null, $configurationNetwork);
@@ -116,10 +114,32 @@ class Unifi extends eqLogic {
 			$network_is_wired->save();
 			$network_is_wired->event($client->is_wired);
 
+			$network_mac = $eqLogic->createCmd('mac', 'info', 'string', false, null, $configurationNetwork);
+			$network_mac->save();
+			$network_mac->event($client->mac);
+
+			$network_network = $eqLogic->createCmd('network', 'info', 'string', false, null, $configurationNetwork);
+			$network_network->save();
 			if(!$client->is_wired) {
-				$network_essid = $eqLogic->createCmd('essid', 'info', 'string', false, null, $configurationNetwork);
-				$network_essid->save();
-				$network_essid->event($client->essid);
+				$network_network->event($client->essid);
+
+				$network_satisfaction = $eqLogic->createCmd('satisfaction', 'info', 'numeric', false, null, $configurationNetwork);
+				$network_satisfaction->save();
+				$network_satisfaction->event($client->satisfaction);
+			} else {
+				$network_network->event($client->network);
+
+				$network_sw_mac = $eqLogic->createCmd('sw_mac', 'info', 'string', false, null, $configurationNetwork);
+				$network_sw_mac->save();
+				$network_sw_mac->event($client->sw_mac);
+
+				$network_sw_depth = $eqLogic->createCmd('sw_depth', 'info', 'numeric', false, null, $configurationNetwork);
+				$network_sw_depth->save();
+				$network_sw_depth->event($client->sw_depth);
+
+				$network_sw_port = $eqLogic->createCmd('sw_port', 'info', 'numeric', false, null, $configurationNetwork);
+				$network_sw_port->save();
+				$network_sw_port->event($client->sw_port);
 			}
 
 			array_push($ipClientList, $client->ip);
@@ -139,10 +159,14 @@ class Unifi extends eqLogic {
 			$eqLogic->setName($device->name);
 			$eqLogic->setConfiguration('ip', $device->ip);
 			$eqLogic->setConfiguration('model', $device->model);
+			$eqLogic->setConfiguration('type', 'device');
 			$eqLogic->save();
 			$network_active = $eqLogic->createCmd('active', 'info', 'binary', false, null, $configurationNetwork);
 			$network_active->save();
 			$network_active->event(1);
+			$network_mac = $eqLogic->createCmd('mac', 'info', 'string', false, null, $configurationNetwork);
+			$network_mac->save();
+			$network_mac->event($client->mac);
 			array_push($ipClientList, $device->ip);
 		}
 		
@@ -152,9 +176,15 @@ class Unifi extends eqLogic {
 			if(!in_array($ipClient, $ipClientList)) {
 				log::add(__CLASS__, 'debug', '[' . $ipClient . '] Le client « ' . $eqLogicToDesactive->getName() . ' » n’est pas actif.');
 				$eqLogicToDesactive->checkAndUpdateCmd('active', 0);
-				$eqLogicToDesactive->checkAndUpdateCmd('essid', "");
+				$eqLogicToDesactive->checkAndUpdateCmd('network', "");
+				$eqLogicToDesactive->checkAndUpdateCmd('satisfaction', "");
+				$eqLogicToDesactive->checkAndUpdateCmd('sw_mac', "");
+				$eqLogicToDesactive->checkAndUpdateCmd('sw_depth', "");
+				$eqLogicToDesactive->checkAndUpdateCmd('sw_port', "");
 				$eqLogicToDesactive->checkAndUpdateCmd('uptime', 0);
 			}
+			$network_essid = $eqLogicToDesactive->createCmd('essid', 'info', 'string', false, null, $configurationNetwork);
+			$network_essid->remove();
 		}
 	}
 
