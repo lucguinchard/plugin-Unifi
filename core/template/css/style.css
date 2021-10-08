@@ -1,2 +1,24 @@
 .Unifi {
 }
+
+.Unifi .network{
+	position: absolute;
+	left: 10px;
+	top: 60px;
+	color:white;
+	left: 5%;
+	border-radius: 10%;
+	padding: 0 2px;
+}
+
+.Unifi .network span{
+	color:white !important;
+	font-size: xx-small;
+}
+
+.Unifi .img_device{
+	display: block;
+	margin: 0 auto;
+	max-width: 60px !important;
+	max-height: 60px !important;
+}

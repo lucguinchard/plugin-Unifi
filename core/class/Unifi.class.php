@@ -120,14 +120,27 @@ class Unifi extends eqLogic {
 
 			$network_network = $eqLogic->createCmd('network', 'info', 'string', false, null, $configurationNetwork);
 			$network_network->save();
+
+			$network_experience = $eqLogic->createCmd('experience', 'info', 'numeric', false, null, $configurationNetwork);
+			$network_experience->save();
+
 			if(!$client->is_wired) {
+				$network_experience->event($client->satisfaction);
 				$network_network->event($client->essid);
 
 				$network_satisfaction = $eqLogic->createCmd('satisfaction', 'info', 'numeric', false, null, $configurationNetwork);
-				$network_satisfaction->save();
-				$network_satisfaction->event($client->satisfaction);
+				$network_satisfaction->remove();
+
+				$network_is_guest = $eqLogic->createCmd('is_guest', 'info', 'binary', false, null, $configurationNetwork);
+				$network_is_guest->save();
+				$network_is_guest->event($client->is_guest);
+
+				$network_radio = $eqLogic->createCmd('radio', 'info', 'string', false, null, $configurationNetwork);
+				$network_radio->save();
+				$network_radio->event($client->radio);
 			} else {
-				$network_network->event($client->network);
+				$network_experience->event($client->wired_rate_mbps);
+				$network_network->event($client->sw_port . ':' . $client->network);
 
 				$network_sw_mac = $eqLogic->createCmd('sw_mac', 'info', 'string', false, null, $configurationNetwork);
 				$network_sw_mac->save();
@@ -176,12 +189,6 @@ class Unifi extends eqLogic {
 			if(!in_array($ipClient, $ipClientList)) {
 				log::add(__CLASS__, 'debug', '[' . $ipClient . '] Le client « ' . $eqLogicToDesactive->getName() . ' » n’est pas actif.');
 				$eqLogicToDesactive->checkAndUpdateCmd('active', 0);
-				$eqLogicToDesactive->checkAndUpdateCmd('network', "");
-				$eqLogicToDesactive->checkAndUpdateCmd('satisfaction', "");
-				$eqLogicToDesactive->checkAndUpdateCmd('sw_mac', "");
-				$eqLogicToDesactive->checkAndUpdateCmd('sw_depth', "");
-				$eqLogicToDesactive->checkAndUpdateCmd('sw_port', "");
-				$eqLogicToDesactive->checkAndUpdateCmd('uptime', 0);
 			}
 			$network_essid = $eqLogicToDesactive->createCmd('essid', 'info', 'string', false, null, $configurationNetwork);
 			$network_essid->remove();
@@ -289,14 +296,15 @@ class Unifi extends eqLogic {
 			}
 		}
 		$replace['#image#'] = $this->getImage();
-		return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, __CLASS__, __CLASS__)));
+		$template = $this->getConfiguration('type');
+		return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, $template, __CLASS__)));
 	}
 
 	public function getImage() {
 		$type = $this->getConfiguration('model');
-		if (isset($type) && $type != "") {
-			$url = "plugins/" . __CLASS__ . "/core/img/" . $type . ".png";
-			if (file_exists($url)) {
+		if (!empty($type)) {
+			$url = "/plugins/" . __CLASS__ . "/core/img/" . $type . ".png";
+			if (file_exists(__DIR__ . "/../../../.." . $url)) {
 				return $url;
 			}
 		}

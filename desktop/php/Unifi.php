@@ -89,10 +89,22 @@ $eqLogicList = eqLogic::byType($plugin->getId());
 					$opacity = (!$eqLogic->getIsEnable() || !$cmd_active->execCmd()) ? 'disableCard' : ''; 
 					$color = ($cmd_active->execCmd()) ? 'green' : 'red'; 
 					$cmd_is_wired = $eqLogic->getCmd(null, 'is_wired');
+					$cmd_experience = $eqLogic->getCmd(null, 'experience');
+					if (is_object($cmd_experience)){
+						$experience = $cmd_experience->execCmd();
+					} else {
+						$experience = "";
+					}
 					if (!is_object($cmd_is_wired) || $cmd_is_wired->execCmd()) { 
 						$is_wired = '<i class="fas fa-ethernet"></i>';
+						switch ($experience) {
+							case 10000: $experience = "10 GbE"; break;
+							case 1000: $experience = "GbE"; break;
+							case 100: $experience = "FE"; break;
+						}
 					} else {
 						$is_wired = '<i class="fas fa-wifi"></i> ';
+						$experience .= " %";
 					}
 					$cmd_network = $eqLogic->getCmd(null, 'network');
 					if (is_object($cmd_network)){
@@ -101,8 +113,9 @@ $eqLogicList = eqLogic::byType($plugin->getId());
 					?>
 					<div class="eqLogicDisplayCard cursor <?= $opacity ?>" data-eqLogic_id="<?= $eqLogic->getId() ?>">
 						<div style="height: 100px;position: relative;">
+							<span style="position: absolute;right: 10px;bottom: 0px;color:white;border-radius: 10%;padding: 0 2px;background-color: blue;font-size: x-small;"><?= $experience ?></span>
 							<img src="<?= $eqLogic->getImage() ?>" style="max-width: 100px !important;width: auto !important;max-height: 100px !important;min-height: auto !important;"/>
-							<span style="position: absolute;left: 10px;bottom: 0px;color:white;left: 5%;border-radius: 10%;padding: 0 2px;background-color: <?= $color ?>;font-size: x-small;"><?= $is_wired ?> <?= $network ?></span>
+							<span style="position: absolute;left: 10px;bottom: 0px;color:white;border-radius: 10%;padding: 0 2px;background-color: <?= $color ?>;font-size: x-small;"><?= $is_wired ?> <?= $network ?></span>
 						</div>
 						<span class="name"><?= $eqLogic->getHumanName(true, true) ?></span>
 					</div>

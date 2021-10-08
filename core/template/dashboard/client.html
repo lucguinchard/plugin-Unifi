@@ -1,0 +1,53 @@
+<div class="eqLogic-widget eqLogic noResize Unifi" data-eqtype="networks"
+	 style="width: 50px;height: 80px;padding : 0px;border:#border#;border-radius:#border-radius#;background-color: #background-color#;color: #color#;#style#;"
+	 data-eqLogic_id="#id#" data-eqLogic_uid="#uid#" data-version="dashboard" >
+	<link rel="stylesheet" href="plugins/Unifi/core/template/css/style.css"/>
+	<center class="widget-name">
+		<span class="cmd cmd-status pull-right" style="width : 30px;z-index: 1030;"></span>
+		<a href="#eqLink#" class="cmd group_name" data-cmd_id="#group_name_id#" style="white-space:nowrap;">#name_display#</a>
+	</center>
+	<div>
+		<img class="img_device" src="#image#"/>
+		<span class="network" style="color: white;">
+			<span class="cmd" data-cmd_id="#is_wired_id#"></span>
+			<span class="cmd" data-cmd_id="#network_id#"></span>
+		</span>
+	</div>
+	<script>
+		jeedom.cmd.update['#active_id#'] = function(_options) {
+			var id = $('.Unifi[data-eqLogic_id=#id#]');
+			if(_options.display_value == '1') {
+				id.find(".img_device").css('opacity', '1');
+				id.find(".network").css('opacity', '1');
+				id.find(".network").css('background-color', 'green');
+			} else {
+				id.find(".img_device").css('opacity', '0.5');
+				id.find(".network").css('opacity', '0.5');
+				id.find(".network").css('background-color', 'red');
+			}
+		};
+		jeedom.cmd.update['#active_id#']({display_value:'#active#'});
+
+		jeedom.cmd.update['#network_id#'] = function(_options) {
+			var id = $('.Unifi[data-eqLogic_id=#id#]');
+			id.find("span[data-cmd_id=#network_id#]").empty().append(_options.display_value);
+		};
+		jeedom.cmd.update['#network_id#']({display_value:'#network#'});
+
+		jeedom.cmd.update['#uptime_id#'] = function(_options) {
+			var id = $('.Unifi[data-eqLogic_id=#id#]');
+			id.find("span[data-cmd_id=#uptime_id#]").empty().append(_options.display_value);
+		};
+		jeedom.cmd.update['#uptime_id#']({display_value:'#uptime#'});
+
+		jeedom.cmd.update['#is_wired_id#'] = function(_options) {
+			var id = $('.Unifi[data-eqLogic_id=#id#]');
+			if(_options.display_value === '1') {
+				id.find("span[data-cmd_id=#is_wired_id#]").empty().append('<i class="fas fa-ethernet"></i>');
+			} else {
+				id.find("span[data-cmd_id=#is_wired_id#]").empty().append('<i class="fas fa-wifi"></i>');
+			}
+		};
+		jeedom.cmd.update['#is_wired_id#']({display_value:'#is_wired#'});
+	</script>
+</div>
