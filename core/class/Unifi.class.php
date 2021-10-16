@@ -71,17 +71,14 @@ class Unifi extends eqLogic {
 			if (!empty($client->name)) {
 				$name = $client->name;
 			} else {
-				if (!empty($client->oui)) {
-					$name = $client->oui;
+				if (!empty($client->ip)) {
+					$name = $client->ip;
 				} else {
-					if (!empty($client->ip)) {
-						$name = $client->ip;
+					if (!empty($client->mac)) {
+						$name = $client->mac;
 					} else {
-						if (!empty($client->mac)) {
-							$name = $client->mac;
-						} else {
-							log::add(__CLASS__, 'info', '[' . $client->ip . '] Problème avec  « ' . print_r($client,true) . ' ».');
-						}
+						$name = "no_name";
+						log::add(__CLASS__, 'info', '[' . $client->ip . '] Problème avec  « ' . print_r($client,true) . ' ».');
 					}
 				}
 			}
@@ -169,7 +166,21 @@ class Unifi extends eqLogic {
 				$eqLogic->setIsVisible(0);
 				$eqLogic->setIsEnable(1);
 			}
-			$eqLogic->setName($device->name);
+			if (!empty($device->name)) {
+				$name = $device->name;
+			} else {
+				if (!empty($device->ip)) {
+					$name = $device->ip;
+				} else {
+					if (!empty($device->mac)) {
+						$name = $device->mac;
+					} else {
+						$name = "no_name";
+						log::add(__CLASS__, 'info', '[' . $device->ip . '] Problème avec  « ' . print_r($device,true) . ' ».');
+					}
+				}
+			}
+			$eqLogic->setName($name);
 			$eqLogic->setConfiguration('ip', $device->ip);
 			$eqLogic->setConfiguration('model', $device->model);
 			$eqLogic->setConfiguration('type', 'device');
