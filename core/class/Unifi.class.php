@@ -170,10 +170,10 @@ class Unifi extends eqLogic {
 				$name = $device->name;
 			} else {
 				if (!empty($device->ip)) {
-					$name = $device->ip;
+					$name = $device->model . ' ('.$device->ip .')';
 				} else {
 					if (!empty($device->mac)) {
-						$name = $device->mac;
+						$name = $device->model . ' ('.$device->mac .')';
 					} else {
 						$name = "no_name";
 						log::add(__CLASS__, 'info', '[' . $device->ip . '] Problème avec  « ' . print_r($device,true) . ' ».');
