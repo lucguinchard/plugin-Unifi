@@ -57,20 +57,14 @@ $eqLogicList = eqLogic::byType($plugin->getId());
 				<?php
 				foreach ($eqLogicList as $eqLogic) {
 					if($eqLogic->getConfiguration('type') != 'device') continue;
-					$opacity = ($eqLogic->getIsEnable()) ? '' : 'disableCard'; 
 					$cmd_active = $eqLogic->getCmd(null, 'active');
-					if($cmd_active->execCmd()) {
-						$color = "green";
-					} else {
-						$color = "red";
-					}
-					$cmd_is_wired = "";
+					$opacity = (!$eqLogic->getIsEnable() || !$cmd_active->execCmd()) ? 'disableCard' : ''; 
 					?>
 					<div class="eqLogicDisplayCard cursor <?= $opacity ?>" data-eqLogic_id="<?= $eqLogic->getId() ?>">
 						<div style="height: 100px">
 							<img src="<?= $eqLogic->getImage() ?>" style="max-width: 100px !important;width: auto !important;max-height: 100px !important;min-height: auto !important;"/>
 						</div>
-						<span class="name"><?= $eqLogic->getHumanName(true, true) ?> <?= $is_wired ?></span>
+						<span class="name"><?= $eqLogic->getHumanName(true, true) ?>/span>
 					</div>
 				<?php } ?>
 			</div>
