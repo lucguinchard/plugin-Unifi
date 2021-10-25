@@ -64,7 +64,7 @@ $eqLogicList = eqLogic::byType($plugin->getId());
 						<div style="height: 100px">
 							<img src="<?= $eqLogic->getImage() ?>" style="max-width: 100px !important;width: auto !important;max-height: 100px !important;min-height: auto !important;"/>
 						</div>
-						<span class="name"><?= $eqLogic->getHumanName(true, true) ?>/span>
+						<span class="name"><?= $eqLogic->getHumanName(true, true) ?></span>
 					</div>
 				<?php } ?>
 			</div>
