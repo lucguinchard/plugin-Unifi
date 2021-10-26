@@ -157,7 +157,7 @@ class Unifi extends eqLogic {
 		}
 
 		foreach ($devices_array as $device) {
-			//log::add(__CLASS__, 'debug', 'device ' . print_r($device,true));
+			log::add(__CLASS__, 'debug', 'device ' . print_r($device,true));
 			log::add(__CLASS__, 'debug', '[' . $device->ip . '] annalyse du device « ' . $device->name . ' ».');
 			$eqLogic = Unifi::byLogicalId($device->_id, __CLASS__);
 			if (!is_object($eqLogic)) {
@@ -196,15 +196,15 @@ class Unifi extends eqLogic {
 		}
 		
 		$eqLogicList = self::byType(__CLASS__);
-		foreach ($eqLogicList as $eqLogicToDesactive) {
-			$ipClient = $eqLogicToDesactive->getConfiguration('ip');
+		foreach ($eqLogicList as $$eqLogic) {
+			$ipClient = $$eqLogic->getConfiguration('ip');
 			if($ipClient === '') {
 				$eqLogic->remove();
 			}else if(!in_array($ipClient, $ipClientList)) {
-				log::add(__CLASS__, 'debug', '[' . $ipClient . '] Le client « ' . $eqLogicToDesactive->getName() . ' » n’est pas actif.');
-				$eqLogicToDesactive->checkAndUpdateCmd('active', 0);
+				log::add(__CLASS__, 'debug', '[' . $ipClient . '] Le client « ' . $$eqLogic->getName() . ' » n’est pas actif.');
+				$$eqLogic->checkAndUpdateCmd('active', 0);
 			}
-			$network_essid = $eqLogicToDesactive->createCmd('essid', 'info', 'string', false, null, $configurationNetwork);
+			$network_essid = $$eqLogic->createCmd('essid', 'info', 'string', false, null, $configurationNetwork);
 			$network_essid->remove();
 		}
 	}
