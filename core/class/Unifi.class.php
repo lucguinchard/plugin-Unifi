@@ -59,36 +59,37 @@ class Unifi extends eqLogic {
 		$ipClientList = array();
 		foreach ($clients_array as $client) {
 			log::add(__CLASS__, 'debug', '[' . $client->ip . '] annalyse du client « ' . $client->name . ' ».');
+			if (!empty($client->ip)) {
 			//log::add(__CLASS__, 'debug', 'client ' . print_r($client,true));
-			$eqLogic = Unifi::byLogicalId($client->_id, __CLASS__);
-			if (!is_object($eqLogic)) {
-				$eqLogic = new Unifi();
-				$eqLogic->setEqType_name(__CLASS__);
-				$eqLogic->setLogicalId($client->_id);
-				$eqLogic->setIsVisible(0);
-				$eqLogic->setIsEnable(1);
-			}
-			if (!empty($client->name)) {
-				$name = $client->name;
-			} else {
-				if (!empty($client->ip)) {
-					$name = $client->ip;
+				$eqLogic = Unifi::byLogicalId($client->_id, __CLASS__);
+				if (!is_object($eqLogic)) {
+					$eqLogic = new Unifi();
+					$eqLogic->setEqType_name(__CLASS__);
+					$eqLogic->setLogicalId($client->_id);
+					$eqLogic->setIsVisible(0);
+					$eqLogic->setIsEnable(1);
+				}
+				if (!empty($client->name)) {
+					$name = $client->name;
 				} else {
-					if (!empty($client->mac)) {
-						$name = $client->mac;
+					if (!empty($client->ip)) {
+						$name = $client->ip;
 					} else {
-						$name = "no_name";
-						log::add(__CLASS__, 'info', '[' . $client->ip . '] Problème avec  « ' . print_r($client,true) . ' ».');
+						if (!empty($client->mac)) {
+							$name = $client->mac;
+						} else {
+							$name = "no_name";
+							log::add(__CLASS__, 'info', '[' . $client->ip . '] Problème avec  « ' . print_r($client,true) . ' ».');
+						}
 					}
 				}
+				$eqLogic->setName($name);
+				$eqLogic->setConfiguration('ip', $client->ip);
+				$eqLogic->setConfiguration('model', $client->dev_id_override);
+				$eqLogic->setConfiguration('type', 'client');
+				$eqLogic->save();
 			}
-			$eqLogic->setName($name);
-			$eqLogic->setConfiguration('ip', $client->ip);
-			$eqLogic->setConfiguration('model', $client->dev_id_override);
-			$eqLogic->setConfiguration('type', 'client');
-			$eqLogic->save();
-			
-			
+
 			$fileUrl = "/plugins/" . __CLASS__ . "/core/img/" . $client->dev_id_override . ".png";
 			$fileAlbumART = __DIR__ . '/../../../..' . $fileUrl;
 			if (!(file_exists($fileAlbumART))) {
@@ -197,7 +198,9 @@ class Unifi extends eqLogic {
 		$eqLogicList = self::byType(__CLASS__);
 		foreach ($eqLogicList as $eqLogicToDesactive) {
 			$ipClient = $eqLogicToDesactive->getConfiguration('ip');
-			if(!in_array($ipClient, $ipClientList)) {
+			if($ipClient === '') {
+				$eqLogic->remove();
+			}else if(!in_array($ipClient, $ipClientList)) {
 				log::add(__CLASS__, 'debug', '[' . $ipClient . '] Le client « ' . $eqLogicToDesactive->getName() . ' » n’est pas actif.');
 				$eqLogicToDesactive->checkAndUpdateCmd('active', 0);
 			}
@@ -312,11 +315,19 @@ class Unifi extends eqLogic {
 	}
 
 	public function getImage() {
-		$type = $this->getConfiguration('model');
-		if (!empty($type)) {
-			$url = "/plugins/" . __CLASS__ . "/core/img/" . $type . ".png";
-			if (file_exists(__DIR__ . "/../../../.." . $url)) {
-				return $url;
+		$type = $this->getConfiguration('type');
+		$model = $this->getConfiguration('model');
+		if (!empty($model)) {
+			switch ($type) {
+				case "client":
+					return "https://static.ubnt.com/fingerprint/0/" . $model . "_129x129.png";
+					break;
+				case "device":
+					$url = "/plugins/" . __CLASS__ . "/core/img/" . $model . ".png";
+					if (file_exists(__DIR__ . "/../../../.." . $url)) {
+						return $url;
+					}
+					break;
 			}
 		}
 		return parent::getImage();
