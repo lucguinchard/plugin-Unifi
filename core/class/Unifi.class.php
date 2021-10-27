@@ -204,8 +204,6 @@ class Unifi extends eqLogic {
 				log::add(__CLASS__, 'debug', '[' . $ipClient . '] Le client « ' . $eqLogic->getName() . ' » n’est pas actif.');
 				$eqLogic->checkAndUpdateCmd('active', 0);
 			}
-			$network_essid = $eqLogic->createCmd('essid', 'info', 'string', false, null, $configurationNetwork);
-			$network_essid->remove();
 		}
 	}
 
