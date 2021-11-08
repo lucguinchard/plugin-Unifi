@@ -28,7 +28,7 @@ if (!isConnect()) {
 <form class="form-horizontal">
 	<fieldset>
 		<div class="container">
-			<span>{{comment.socket}}</span>
+			<span>{{controller.connection}}</span>
 		</div>
 		<div class="form-group">
 			<label class="col-lg-4 control-label">{{controller.user}}</label>

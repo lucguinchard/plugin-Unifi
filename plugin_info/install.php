@@ -24,6 +24,10 @@ function Unifi_install() {
 }
 
 function Unifi_update() {
+	$eqLogicList = self::byType("Unifi");
+	foreach ($eqLogicList as $eqLogic) {
+		$ipClient = $eqLogic->getConfiguration('ip');
+	}
 }
 
 function Unifi_remove() {

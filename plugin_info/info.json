@@ -11,6 +11,6 @@
 	"hasDependency": false,
 	"hasOwnDeamon": false,
 	"maxDependancyInstallTime": 0,
-	"changelog": "https://lucguinchard.github.io/plugin-Unifi/#language#/changelog",
-	"documentation": "https://lucguinchard.github.io/plugin-Unifi/#language#/"
+	"changelog": "https://lucguinchard.github.io/plugin-Unifi/changelog",
+	"documentation": "https://lucguinchard.github.io/plugin-Unifi/"
 }
