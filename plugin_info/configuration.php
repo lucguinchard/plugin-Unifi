@@ -28,31 +28,40 @@ if (!isConnect()) {
 <form class="form-horizontal">
 	<fieldset>
 		<div class="container">
-			<span>{{controller.connection}}</span>
-		</div>
-		<div class="form-group">
-			<label class="col-lg-4 control-label">{{controller.user}}</label>
-			<div class="col-lg-4">
-				<input type="text" class="configKey form-control" data-l1key="controller.user" value=""/>
+			<h3><i class="fas fa-exchange-alt"></i> {{Connexion API}}</h3>
+			<div class="form-group">
+				<label class="col-lg-2 control-label">{{Nom d’utilisateur}}</label>
+				<div class="col-lg-4">
+					<input type="text" class="configKey form-control" data-l1key="controller.user" value=""/>
+				</div>
 			</div>
-		</div>
-		<div class="form-group">
-			<label class="col-lg-4 control-label">{{controller.password}}</label>
-			<div class="col-lg-4">
-				<input type="password" class="configKey form-control" data-l1key="controller.password"/>
+			<div class="form-group">
+				<label class="col-lg-2 control-label">{{Mot de passe}}</label>
+				<div class="col-lg-4">
+					<input type="password" class="configKey form-control" data-l1key="controller.password"/>
+				</div>
 			</div>
-		</div>
-		<div class="form-group">
-			<label class="col-lg-4 control-label">{{controller.url}}</label>
-			<div class="col-lg-4">
-				<input type="text" class="configKey form-control" data-l1key="controller.url" placeholder="https://host"/>
+			<div class="form-group">
+				<label class="col-lg-2 control-label">{{Url}}</label>
+				<div class="col-lg-4">
+					<input type="text" class="configKey form-control" data-l1key="controller.url" placeholder="https://host"/>
+				</div>
 			</div>
-		</div>
-		<div class="form-group">
-			<label class="col-lg-4 control-label">{{controller.site}}<sup><i class="fas fa-question-circle" title="{{Vous pouvez indiquer plusieurs site en les séparant avec des virgules.}}"></i></sup></label>
-			<div class="col-lg-4">
-				<input type="text" class="configKey form-control" data-l1key="controller.site" placeholder="default si un seul site"/>
+			<div class="form-group">
+				<label class="col-lg-2 control-label">{{Site(s)}}<sup><i class="fas fa-question-circle" title="{{Vous pouvez indiquer plusieurs site en les séparant avec des virgules.}}"></i></sup></label>
+				<div class="col-lg-4">
+					<input type="text" class="configKey form-control" data-l1key="controller.site" placeholder="default si un seul site"/>
+				</div>
+			</div>
+			<br/>
+			<h3><i class="fas fa-coffee"></i> {{Offrez-un café}}</h3>
+			<div class="form-group">
+				<div>
+					{{Ce plugin est entièrement gratuit et indépendant, Mais si cela vous enchante j’accepte les}} <a href="https://www.paypal.com/paypalme/lucguinchard" title="{{thé/café/bière}}" target="_blank"><i class="fas fa-coffee"></i></a>.
+				</div>
 			</div>
 		</div>
 	</fieldset>
+	<br/>
+	<br/>
 </form>

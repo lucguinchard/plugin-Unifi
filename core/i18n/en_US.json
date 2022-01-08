@@ -1,0 +1,12 @@
+{
+	"plugins\/Unifi\/plugin_info\/configuration.php": {
+		"Nom d’utilisateur": "User",
+		"Mot de passe": "Password",
+		"Url": "Url",
+		"Site(s)": "Site(s)",
+		"Vous pouvez indiquer plusieurs site en les séparant avec des virgules.": "You can indicate multiple sites by separating them with commas.",
+		"Offrez-un café": "Offer a coffee",
+		"Ce plugin est entièrement gratuit et indépendant, Mais si cela vous enchante j’accepte les": "This plugin is completely free and independent, But if you like it I accept the",
+		"thé/café/bière": "tea/coffee/beer"
+	}
+}
