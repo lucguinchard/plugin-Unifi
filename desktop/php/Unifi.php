@@ -67,7 +67,8 @@ $eqLogicList = eqLogic::byType($plugin->getId());
 					$opacity = (!$eqLogic->getIsEnable() || !$cmd_active->execCmd()) ? 'disableCard' : ''; 
 					?>
 					<div class="eqLogicDisplayCard cursor <?= $opacity ?>" data-eqLogic_id="<?= $eqLogic->getId() ?>">
-						<img src="<?= $eqLogic->getImage() ?>" style="max-width: 100px !important;width: auto !important;max-height: 100px !important;min-height: auto !important;"/>
+						<img src="<?= $eqLogic->getImage() ?>"/>
+						<br/>
 						<span class="name"><?= $eqLogic->getHumanName(true, true) ?></span>
 					</div>
 				<?php } ?>
@@ -110,7 +111,7 @@ $eqLogicList = eqLogic::byType($plugin->getId());
 					}
 					?>
 					<div class="eqLogicDisplayCard cursor <?= $opacity ?>" data-eqLogic_id="<?= $eqLogic->getId() ?>">
-						<img src="<?= $eqLogic->getImage() ?>" style="max-width: 100px !important;width: auto !important;max-height: 100px !important;min-height: auto !important;"/>
+						<img src="<?= $eqLogic->getImage() ?>"/>
 						<br/>
 						<span class="displayTableRight">
 							<span style="color:white;border-radius: 10%;padding: 0 2px;background-color: <?= $color ?>;font-size: x-small;"><?= $is_wired ?> <?= $network ?></span>
