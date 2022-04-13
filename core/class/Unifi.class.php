@@ -31,10 +31,10 @@ class Unifi extends eqLogic {
 
 	public static function cron() {
 		log::add(__CLASS__, 'debug', 'Appel du Cron');
-		Unifi::searchAndSaveDeviceList();
+		Unifi::searchAndSaveDeviceList('info');
 	}
 
-	public static function searchAndSaveDeviceList() {
+	public static function searchAndSaveDeviceList($logUnreachable = 'error') {
 		$controller_user = config::byKey('controller.user', __CLASS__);
 		$controller_password = config::byKey('controller.password', __CLASS__);
 		$controller_url = config::byKey('controller.url', __CLASS__);
@@ -43,7 +43,7 @@ class Unifi extends eqLogic {
 		$unifi_connection = new UniFi_API\Client($controller_user, $controller_password, $controller_url, $controller_site);
 		$isLogin = $unifi_connection->login();
 		if(!$isLogin) {
-			log::add(__CLASS__, 'error', 'Le contrôleur « ' . $controller_url . ' » est injoignable.');
+			log::add(__CLASS__, $logUnreachable, 'Le contrôleur « ' . $controller_url . ' » est injoignable.');
 			return;
 		}
 		if($isLogin != 1) {
